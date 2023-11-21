@@ -1,0 +1,112 @@
+.container {
+    width: 100%;
+    background-color: #2d2d2d;
+
+    &.hahahaha {
+        background-color: #fff;
+        padding: 10000px;
+    }
+
+    // nominated-movie
+    .wrap-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+
+        .btn {
+            font-size: 1.6rem;
+            color: #fff;
+            border: none;
+            padding: 2px 4px;
+            cursor: pointer;
+
+            &:hover {
+                opacity: .8;
+            }
+        }
+
+        .btn+.btn {
+            margin-left: 6px;
+        }
+
+        .btn-red {
+            background-color: red;
+        }
+
+        .btn-blue {
+            background-color: blue;
+        }
+    }
+
+    // film filter
+    .film-filter {
+        background-color: #1c1c1c;
+
+        ul {
+            display: flex;
+            align-items: center;
+            background-color: #9c3737;
+            justify-content: space-between;
+
+            li {
+                font-size: 1.8rem;
+                color: #ccc;
+                background-color: rgb(28 28 28);
+                width: 100%;
+                padding: 17px 0;
+                margin-top: 2px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:hover {
+                    background: #2d2d2d;
+                    cursor: pointer;
+                }
+
+                .icon {
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        table {
+            width: 100%;
+
+            tr {
+
+                td {
+                    text-align: center;
+                    color: #ccc;
+                    font-size: 1.5rem;
+                    background-color: #000;
+                    width: 20%;
+
+                    a {
+                        width: 100%;
+                        display: block;
+                        padding: 10px 0;
+                        height: 100%;
+
+                        &:hover {
+                            background: #3e3e3e;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    // list-movie
+    .wrap-list-movie {
+        margin: 0 12px;
+
+        .row {
+            display: flex;
+            padding: 12px 6px 0;
+            background-color: #404040;
+        }
+    }
+}

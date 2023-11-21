@@ -1,0 +1,54 @@
+.nominated-movie {
+    margin: 12px 12px 0;
+    background-color: #242525;
+    display: flex;
+    position: relative;
+
+    .title {
+        font-size: 2rem;
+        color: #fff;
+        padding: 9px 12px;
+        background-color: #000;
+        display: inline-block;
+        position: relative;
+        font-weight: 600;
+    }
+
+    .title::after {
+        display: block;
+        content: "";
+        position: absolute;
+        left: 100%;
+        top: 0;
+        bottom: 0;
+        border-style: solid;
+        border-color: transparent transparent transparent #000;
+        border-width: 20px;
+    }
+}
+
+// mobile and table
+@media (max-width: 63.9375em) {}
+
+// pc resoluction small and pc resoluction large
+@media (min-width: 64em) {}
+
+// mobile
+@media (max-width: 46.1875em) {
+    .nominated-movie {
+        margin: 12px 8px 0;
+
+        .title {}
+
+        .title::after {}
+    }
+}
+
+// table
+@media (min-width:46.25em) and (max-width: 63.9375em) {}
+
+// pc resoluction small
+@media (min-width:64em) and (max-width: 77.4375em) {}
+
+// pc resoluction large
+@media (min-width:77.5em) {}

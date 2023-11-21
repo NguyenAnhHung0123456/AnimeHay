@@ -1,0 +1,282 @@
+.watch-movie {
+    padding-top: 12px;
+    background-color: #2d2d2d;
+
+    // movie-details
+    .movie-details {
+        margin: 0 12px;
+        padding: 12px;
+        background-color: #000;
+        border-radius: 6px;
+
+        .first {
+            display: flex;
+            align-items: center;
+
+            svg {
+                font-size: 1.8rem;
+                color: #ffb970;
+            }
+
+            div {
+                margin-left: 8px;
+                font-size: 1.8rem;
+                color: #ffb970;
+            }
+        }
+
+        .second {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #555;
+            padding-top: 12px;
+
+            span {
+                font-size: 1.6rem;
+                color: #fff;
+                font-weight: 500;
+            }
+        }
+    }
+
+    // introduction
+    .introduction {
+        background-color: #25867d;
+        padding: 12px;
+        margin: 12px 12px 0;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+
+        span {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-right: 6px;
+        }
+
+        a {
+            font-size: 1.6rem;
+            color: #4f22c7;
+            margin-right: 6px;
+        }
+    }
+
+    // how-episode
+    .how-episode {
+        margin: 12px 12px 0;
+        background-color: #1d1c1c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+
+        .first {
+            font-size: 2.2rem;
+            color: #fff;
+            padding: 0 26px;
+            background-color: #000;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+
+            &::after {
+                display: block;
+                content: "";
+                left: 100%;
+                top: 0%;
+                position: absolute;
+                border-width: 25px;
+                border-color: transparent transparent #000 #000;
+                border-style: solid;
+            }
+        }
+
+        .second {
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            position: relative;
+
+            &::after {
+                display: block;
+                content: "";
+                right: 100%;
+                top: 0%;
+                position: absolute;
+                border-width: 25px;
+                border-color: transparent #000 #000 transparent;
+                border-style: solid;
+            }
+
+            div {
+                width: 32px;
+                height: 34px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 4px;
+
+                svg {
+                    font-size: 1.8rem;
+                    color: #fff;
+                }
+            }
+
+            div+div {
+                margin-left: 6px;
+            }
+        }
+
+    }
+
+    // button-server
+    .button-server {
+        display: flex;
+        justify-content: center;
+        margin: 13px 12px 0;
+    }
+
+    // video
+    .video {
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 12px 12px 0;
+        padding: 24px 0;
+
+        video {
+            height: 42vw;
+        }
+    }
+
+    // option
+    .option {
+        margin: 12px 12px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    // list-episode
+    .list-episode {
+        padding: 12px;
+        margin: 12px 12px 0;
+        background-color: #404040;
+        border-radius: 6px;
+
+        .before {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .after {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #555;
+
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                a {
+                    font-size: 1.4rem;
+                    color: #fff;
+                    border: 1px solid #4e4e4e;
+                    padding: 8px 20px;
+                    background: #333232;
+
+                    &:hover {
+                        background-color: #bb6464;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    // follow-fb
+    .follow-fb {
+        background-color: transparent;
+        margin: 12px 12px 0;
+        text-align: center;
+
+        .wrap-follow-fb {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: url(https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/293194283_107796511999309_1462963328192186674_n.jpg?stp=dst-jpg_s350x350&_nc_cat=1&ccb=1-7&_nc_sid=dd9801&_nc_ohc=Dm7AAm3n81IAX9DS4-y&_nc_ht=scontent.fdad3-4.fna&edm=ADwHzz8EAAAA&oh=00_AfCWjzhcPVyYD9Q3qt4_3zjHpojvcVS0rcb_h41GYrNyKw&oe=64E7134D) no-repeat center center;
+
+            .logo {
+
+                img {
+                    width: 54px;
+                    border: 2px solid #ccc;
+                }
+            }
+
+            .details {
+                margin-left: 6px;
+
+                a {
+                    font-size: 2.1rem;
+                    color: #fff;
+                    width: 240px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+
+                .wrap-fb {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 4px;
+
+                    .fb {
+                        background-color: #ccc;
+                        display: flex;
+                        align-items: center;
+                        padding: 4px;
+                        font-size: 1.4rem;
+                        border-radius: 2px;
+
+                        svg {}
+
+                        span {
+                            color: #333;
+                            margin-left: 4px;
+                        }
+                    }
+
+                    .followed {
+                        font-size: 1.4rem;
+                        color: #fff;
+                        margin-left: 6px;
+                    }
+                }
+            }
+        }
+    }
+
+    // read-story
+    .read-story {
+        display: flex;
+        align-items: center;
+        margin: 12px 12px 0;
+        justify-content: center;
+    }
+}
