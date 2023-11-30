@@ -41,7 +41,6 @@ function WatchMoviePage() {
       try {
         const response = await axios.get(`http://localhost:4000/films/watch-film/${id}/${episode}`);
         setData(response.data)
-        console.log('res', response.data)
       } catch (error) {
         console.error(error);
       }

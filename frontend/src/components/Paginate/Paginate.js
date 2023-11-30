@@ -37,8 +37,7 @@ function Paginate({ itemsPerPage = 30, items }) {
                                     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
                                 }}
                                 currentEpisode={item.currentEpisode}
-                                seriesFilmLength={item.seriesFilmLength}
-                                oddFilmLength={item.oddFilmLength}
+                                number_episodes={item.number_episodes}
                                 mediumPoint={item.mediumPoint}
                             />
                         ))

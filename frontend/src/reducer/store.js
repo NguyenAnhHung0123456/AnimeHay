@@ -3,7 +3,6 @@ import { combineReducers } from 'redux'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import { configureStore } from '@reduxjs/toolkit'
 
-import counterReducer from './counterSlice'
 import userReducer from './userSlice'
 
 const persistConfig = {
@@ -12,7 +11,6 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-    counter: counterReducer,
     user: userReducer
 })
 
@@ -21,6 +19,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 const store = configureStore({
     reducer: persistedReducer,
     devTools: true,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 })
 
 const persistor = persistStore(store)

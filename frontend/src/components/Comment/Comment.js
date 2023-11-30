@@ -64,8 +64,6 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
 
                 Promise.all([response, response2]).then(([response, response2]) => {
                     setItems(response.data)
-                    console.log('r1', response.data)
-                    console.log('r2', response2.data)
                     setRepComment(response2.data)
                 })
             } catch (error) {

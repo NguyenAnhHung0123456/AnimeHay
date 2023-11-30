@@ -10,6 +10,7 @@ import PostTime from '../../../components/PostTime/PostTime';
 import Experience from '../../../components/Experience/Experience';
 import FormUpdateAvatar from './FormUpdateAvatar'
 import Layer from '../../../components/Layer';
+import Lever from '../../../components/Lever/Lever';
 
 let cx = classNames.bind(styles);
 
@@ -30,7 +31,7 @@ function Profile() {
                     {inforUser && <img alt='avata' src={inforUser.avatar === null ? `https://i.ytimg.com/vi/idavatar/mqdefault.jpg` : inforUser.avatar} />}
                 </div>
 
-                {inforUser && <span>Lv.{inforUser.lever}</span>}
+                {inforUser && <span>{Lever(inforUser.lever)}</span>}
 
                 <button
                     onClick={() => {

@@ -6,7 +6,7 @@
 
     .infor-movie {
         padding: 0 6px;
-        height: 226px;
+        height: 240px;
 
         // container-img
         .container-img {
@@ -19,7 +19,8 @@
 
             img {
                 width: 100%;
-                height: auto;
+                height: 100%;
+                object-fit: cover;
                 cursor: pointer;
             }
 

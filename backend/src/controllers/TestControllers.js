@@ -6,8 +6,20 @@ class TestControllers {
     // [method: get], [router: /]
     async test(req, res, next) {
         try {
+            const a = await promisePool.execute(
+                `
+                    select avg(evaluateuseroffilm.filmId) as avg, count(evaluateuseroffilm.filmId) as count
+                    from evaluateuseroffilm 
+                    join evaluates on evaluates.id = evaluateuseroffilm.evaluateId
+                    where evaluateuseroffilm.filmId = ?
+                    group by evaluateuseroffilm.filmId
+                `,
+                [7]
+            )
 
-            res.json('test sucessfully!')
+            console.log('a', a)
+
+            res.status(200).json('test sucessfully!')
         } catch (err) {
             console.log(err)
             res.status(500).json('sai')

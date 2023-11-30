@@ -41,7 +41,7 @@ function Header() {
 
     return (
         <header className={cx('header')}>
-            <Link to='/' onClick={handleUnShowFilmFilter}>
+            <Link to='/' onClick={handleUnShowFilmFilter} className={cx('header-logo')}>
                 <img alt='logo' className={cx('logo')} src='/logo.png' />
             </Link>
 
@@ -50,49 +50,49 @@ function Header() {
 
             <ul className={cx('navigate-list')}>
                 {showSearch === false ?
-                    (<li className='hide-on-ps-pl' onClick={() => {
+                    (<li className={`hide-on-ps-pl ${cx('navigate-item')}`} onClick={() => {
                         setShowSearch(true)
                     }}>
 
-                        <Link>
+                        <Link className={cx('navigate-item-link')}>
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </Link>
                     </li>)
                     :
-                    (<li className='hide-on-ps-pl' style={{ 'backgroundColor': 'rgb(156, 55, 55)' }} onClick={() => {
+                    (<li className={`hide-on-ps-pl ${cx('navigate-item')}`} style={{ 'backgroundColor': 'rgb(156, 55, 55)' }} onClick={() => {
                         setShowSearch(false)
                     }}>
-                        <Link>
+                        <Link className={cx('navigate-item-link')}>
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </Link>
                     </li>)
                 }
                 {showFilmFilter === false ?
-                    (<li onClick={handleShowFilmFilter}>
-                        <Link>
+                    (<li className={cx('navigate-item')} onClick={handleShowFilmFilter}>
+                        <Link className={cx('navigate-item-link')}>
                             <FontAwesomeIcon icon={faList} />
                         </Link>
                     </li>)
                     :
-                    (<li style={{ 'backgroundColor': 'rgb(156, 55, 55)' }} onClick={handleUnShowFilmFilter}>
-                        <Link>
+                    (<li className={cx('navigate-item')} style={{ 'backgroundColor': 'rgb(156, 55, 55)' }} onClick={handleUnShowFilmFilter}>
+                        <Link className={cx('navigate-item-link')}>
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </Link>
                     </li>)}
-                <li onClick={handleUnShowFilmFilter}>
-                    <Link to='/history'>
+                <li className={cx('navigate-item')} onClick={handleUnShowFilmFilter}>
+                    <Link to='/history' className={cx('navigate-item-link')}>
                         <FontAwesomeIcon icon={faClockRotateLeft} />
                     </Link>
                 </li>
-                <li onClick={handleUnShowFilmFilter}>
-                    <Link to='/followed'>
+                <li className={cx('navigate-item')} onClick={handleUnShowFilmFilter}>
+                    <Link to='/followed' className={cx('navigate-item-link')}>
                         <FontAwesomeIcon icon={faBookmark} />
                     </Link>
                 </li>
                 {!inforUser ?
                     (
-                        <li onClick={handleUnShowFilmFilter}>
-                            <Link to='/log-in'>
+                        <li className={cx('navigate-item')} onClick={handleUnShowFilmFilter}>
+                            <Link to='/log-in' className={cx('navigate-item-link')}>
                                 <FontAwesomeIcon icon={faRightFromBracket} />
                             </Link>
                         </li>

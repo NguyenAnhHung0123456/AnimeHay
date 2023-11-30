@@ -159,225 +159,192 @@ function MovieInformationPage() {
   }, [query])
 
   return (
-    <MyContext.Provider value={functest} >
-      <div className={cx('movie-information')}>
+    <div className={cx('movie-information')}>
 
-        {/* login section */}
-        {inforUsers && <LoginSection />}
+      {/* login section */}
+      {inforUsers && <LoginSection />}
 
-        {/* infor-movie */}
-        <div className={cx('wrap-infor-movie')}>
-          {data && (<h2>{data.inforFilm[0].name}</h2>)}
-          <div className={cx('infor-movie')}>
-            <div className={cx('img')}>
-              {data && <img alt='xin chao' src={data.inforFilm[0].image} />}
+      {/* infor-movie */}
+      <div className={cx('wrap-infor-movie')}>
+        <h2>{data?.inforFilm?.name}</h2>
+        <div className={cx('infor-movie')}>
+          <div className={cx('img')}>
+            <img alt='xin chao' src={data?.inforFilm?.image} />
+          </div>
+          <div className={cx('wrap-row')}>
+            <div className={cx('row')}>
+              <div className={cx('column-1')}>Thể loại</div>
+              <div className={cx('column-2')}>
+                {data?.genres.map((genre, index) => (
+                  <button key={index}>{genre.genre}</button>
+                ))}
+              </div>
             </div>
-            <div className={cx('wrap-row')}>
-              <div className={cx('row')}>
-                <div className={cx('column-1')}>Thể loại</div>
-                <div className={cx('column-2')}>
-                  {data && data.genres.map((genre, index) => (
-                    <button key={index}>{genre.genre}</button>
-                  ))}
-                </div>
+            <div className={cx('row')}>
+              <div className={cx('column-1')}>Trạng thái</div>
+              <div className={cx('column-2')}>
+                <span>{data?.inforFilm?.number_episodes === +data?.maxCurrent ? 'Đã hoàn thành' : 'Đang tiến hành'}</span>
               </div>
-              <div className={cx('row')}>
-                <div className={cx('column-1')}>Trạng thái</div>
-                <div className={cx('column-2')}>
-                  {data && <span>{data.inforFilm[0].status === 0 ? 'Đang tiến hành' : 'Đã hoàn thành'}</span>}
-                </div>
+            </div>
+            <div className={cx('row')}>
+              <div className={cx('column-1')}>Điểm</div>
+              <div className={cx('column-2')}>
+                <span>
+                  {(data?.mediumPoint.length === 1) ? data.mediumPoint[0].avg : 0}
+                  ||
+                  {data?.mediumPoint.length === 1 ? data.mediumPoint[0].count : 0}
+                  đánh giá
+                </span>
               </div>
-              <div className={cx('row')}>
-                <div className={cx('column-1')}>Điểm</div>
-                <div className={cx('column-2')}>
-                  {data && <span>{`${(data.mediumPoint.length === 1) ? data.mediumPoint[0].avg : 0}
-                ||
-                ${data.mediumPoint.length === 1 ? data.mediumPoint[0].count : 0} đánh giá`}</span>}
-                </div>
+            </div>
+            <div className={cx('row')}>
+              <div className={cx('column-1')}>Phát hành
               </div>
-              <div className={cx('row')}>
-                <div className={cx('column-1')}>Phát hành
-                </div>
-                <div className={cx('column-2')}>
-                  {data && <span>{data.inforFilm[0].year}</span>}
-                </div>
+              <div className={cx('column-2')}>
+                <span>{data?.inforFilm?.year}</span>
               </div>
-              <div className={cx('row')}>
-                <div className={cx('column-1')}>Thời lượng
-                </div>
-                <div className={cx('column-2')}>
-                  {data && <span>{data.inforFilm[0].oddFilmLength === null
-                    ? data.inforFilm[0].seriesFilmLength
-                    : (data.inforFilm[0].oddFilmLength + ' phút')
-                  }</span>}
-                </div>
+            </div>
+            <div className={cx('row')}>
+              <div className={cx('column-1')}>Thời lượng
+              </div>
+              <div className={cx('column-2')}>
+                {data && <span>{data.inforFilm?.movie_duration === null
+                  ?
+                  '??'
+                  :
+                  (data.inforFilm?.movie_duration)
+                }</span>}
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* status-play */}
-        <div className={cx('status-play')}>
-          <div className={cx('before')}>
-            {data && <Link
-              to={`/watch-movie?id=${data.inforFilm[0].id}&episode=${data.episodeFilm[data.episodeFilm.length - 1].episode}`}
-              style={{ 'background': '#25867d' }}
-              onClick={() => {
-                window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-              }}
-              className={cx('play')}
-            >
-              <FontAwesomeIcon icon={faCirclePlay} />
-            </Link>}
-            {inforUsers ?
-              (followed.length === 0 ?
-                (<div style={{ 'background': '#369e69' }} className={cx('play')} onClick={handleAddFollow}>
-                  <FontAwesomeIcon icon={faFileCirclePlus} />
-                </div>)
-                :
-                (<div style={{ 'background': '#7d4848' }} className={cx('play')} onClick={handleRemoteFollow}>
-                  <FontAwesomeIcon icon={faFileExcel} />
-                </div>))
-              :
-              (<div style={{ 'background': '#369e69' }} className={cx('play')} onClick={() => {
-                displayMsg('toastLogin')
-              }}>
+      {/* status-play */}
+      <div className={cx('status-play')}>
+        <div className={cx('before')}>
+          {data && <Link
+            to={`/watch-movie?id=${data.inforFilm.id}&episode=${data.episodeFilm[data.episodeFilm.length - 1].episode}`}
+            style={{ 'background': '#25867d' }}
+            onClick={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+            }}
+            className={cx('play')}
+          >
+            <FontAwesomeIcon icon={faCirclePlay} />
+          </Link>}
+          {inforUsers ?
+            (followed.length === 0 ?
+              (<div style={{ 'background': '#369e69' }} className={cx('play')} onClick={handleAddFollow}>
                 <FontAwesomeIcon icon={faFileCirclePlus} />
               </div>)
-            }
-            {/* ToastContainer */}
-            <ToastContainer
-              position="bottom-right"
-              autoClose={3000}
-              hideProgressBar
-              newestOnTop={false}
-              rtl={false}
-              pauseOnFocusLoss
-              // autoClose={true}
-              draggable
-              pauseOnHover
-              theme="dark"
-              closeButton={false}
-            />
-          </div>
-          <div className={cx('after')}
-            style={{ 'background': '#369e69' }}
-            onClick={() => { displayMsg('filmReview') }}
-          >
-            <FontAwesomeIcon icon={faStar} />
-          </div>
+              :
+              (<div style={{ 'background': '#7d4848' }} className={cx('play')} onClick={handleRemoteFollow}>
+                <FontAwesomeIcon icon={faFileExcel} />
+              </div>))
+            :
+            (<div style={{ 'background': '#369e69' }} className={cx('play')} onClick={() => {
+              displayMsg('toastLogin')
+            }}>
+              <FontAwesomeIcon icon={faFileCirclePlus} />
+            </div>)
+          }
+          {/* ToastContainer */}
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={false}
+            rtl={false}
+            pauseOnFocusLoss
+            // autoClose={true}
+            draggable
+            pauseOnHover
+            theme="dark"
+            closeButton={false}
+          />
         </div>
+        <div className={cx('after')}
+          style={{ 'background': '#369e69' }}
+          onClick={() => { displayMsg('filmReview') }}
+        >
+          <FontAwesomeIcon icon={faStar} />
+        </div>
+      </div>
 
-        {/* part-of-movie */}
-        {data && data.relatedFilm.length !== 0 &&
-          <div className={cx('part-of-movie')}>
-            <h2>Phim liên kết</h2>
-            <div className={cx('wrap-btn')}>
-              {data.relatedFilm.map((item, index) => (
-                <div key={index}>
-                  {item.currentMovie && <Link key={item.currentFilmLink}
-                    to={`/movie-information?filmId=${item.currentFilmLink}`}
-                    onClick={() => {
-                      setQuery(item.relatedFilmLink)
-                      window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: "auto",
-                      });
-                    }}
-                    className={cx('current-film')}
-                  >
-                    Movie {item.currentMovie}
-                  </Link>}
-                  {item.currentPart && <Link key={item.currentFilmLink}
-                    to={`/movie-information?filmId=${item.currentFilmLink}`}
-                    onClick={() => {
-                      setQuery(item.relatedFilmLink)
-                      window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: "auto",
-                      });
-                    }}
-                    className={cx('current-film')}
-                  >
-                    Phần {item.currentPart}
-                  </Link>}
-                  {item.relatedMovie && <Link key={item.relatedFilmLink}
-                    to={`/movie-information?filmId=${item.relatedFilmLink}`}
-                    onClick={() => {
-                      setQuery(item.relatedFilmLink)
-                      window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: "auto",
-                      });
-                    }}
-                  >
-                    Movie {item.relatedMovie}
-                  </Link>}
-                  {item.relatedPart && <Link key={item.relatedFilmLink}
-                    to={`/movie-information?filmId=${item.relatedFilmLink}`}
-                    onClick={() => {
-                      setQuery(item.relatedFilmLink)
-                      window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: "auto",
-                      });
-                    }}
-                  >
-                    Phần {item.relatedPart}
-                  </Link>}
-                </div>
-              ))}
-            </div>
-          </div>
-        }
+      {/* part-of-movie */}
+      {data?.relatedFilm.length !== 0 &&
+        <div className={cx('part-of-movie')}>
+          <h2>Phim liên quan</h2>
 
-        {/* wrap-content */}
-        <div className={cx('wrap-content')}>
-          <div className={cx('column-1')}>
-            <span>Danh sách tập</span>
-            <div>
-              {data && data.episodeFilm.map((item, index) => {
-                item.episode === 10000 && (minEpisode = 10000)
+          <div className={cx('wrap-btn')}>
+            {data?.relatedFilm.map((item, index) => (
+              <div key={index}>
 
-                return (<Link
-                  key={index}
-                  to={`/watch-movie?id=${data.inforFilm[0].id}&episode=${item.episode}`}
+                <Link key={item?.relatedFilmLink}
+                  to={`/movie-information?filmId=${item?.relatedFilmLink}`}
                   onClick={() => {
-                    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+                    setQuery(item.relatedFilmLink)
+                    window.scrollTo({
+                      top: 0,
+                      left: 0,
+                      behavior: "auto",
+                    });
                   }}
                 >
-                  {item.episode !== 10000 ? item.episode : 'Full'}
-                </Link>)
-              })}
-            </div>
-          </div>
-          <div className={cx('column-2')}>
-            <span>Nội dung</span>
-            {data && <div>{data.inforFilm[0].description}</div>}
+                  {item?.relatedPart}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
+      }
 
-        {/* comment-section */}
-        <Comment
-          url={`http://127.0.0.1:4000/films/comment-film?filmId=${query}`}
-          url2={`http://127.0.0.1:4000/films/rep-comment?filmId=${query}`}
-          filmId={query}
-          userId={inforUsers.id}
-          episode={minEpisode}
-        />
-
-        {/* read stories */}
-        <div className={cx('read-stories')}>
-          <Link to='/'>
-            <Button content='Đọc truyện chữ' border={false} />
-          </Link>
+      {/* wrap-content */}
+      <div className={cx('wrap-content')}>
+        <div className={cx('column-1')}>
+          <span>Danh sách tập</span>
+          <div>
+            {data?.episodeFilm.map((item, index) => {
+              return (<Link
+                key={index}
+                to={`/watch-movie?id=${data.inforFilm.id}&episode=${item.episode}`}
+                onClick={() => {
+                  window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+                }}
+              >
+                {
+                  data?.inforFilm.number_episodes === 1 ?
+                    'Full'
+                    :
+                    item.episode
+                }
+              </Link>)
+            })}
+          </div>
         </div>
-      </div >
-    </MyContext.Provider>
+        <div className={cx('column-2')}>
+          <span>Nội dung</span>
+          {data && <div>{data.inforFilm?.description}</div>}
+        </div>
+      </div>
+
+      {/* comment-section */}
+      <Comment
+        url={`http://127.0.0.1:4000/films/comment-film?filmId=${query}`}
+        url2={`http://127.0.0.1:4000/films/rep-comment?filmId=${query}`}
+        filmId={query}
+        userId={inforUsers.id}
+        episode={minEpisode}
+      />
+
+      {/* read stories */}
+      <div className={cx('read-stories')}>
+        <Link to='/'>
+          <Button content='Đọc truyện chữ' border={false} />
+        </Link>
+      </div>
+    </div >
   );
 }
 

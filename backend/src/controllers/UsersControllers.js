@@ -235,15 +235,16 @@ class UsersControllers {
 
             const query1 = promisePool.execute(
                 `
-                select users.name, films.name, max(episodeOfFilm.episode) as newEpisode,
-                films.seriesFilmLength, oddFilmLength, films.image, films.id
+                select films.name, films.description, films.movie_duration, films.number_episodes, films.year, films.image, films.id,
+                max(episodeoffilm.episode) as currentEpisode
                 from followedFilm
                 join users on users.id = followedFilm.userId
                 join films on films.id = followedFilm.filmId
-                join episodeOfFilm on episodeOfFilm.filmId = followedFilm.filmId
-                where followedFilm.userId = ${userId}
-                group by users.name, films.name, films.seriesFilmLength, films.oddFilmLength, films.image, films.id
-                `
+                join episodeoffilm on films.id = episodeoffilm.filmId
+                where followedFilm.userId = ?
+                group by films.name, films.description, films.movie_duration, films.number_episodes, films.year, films.image, films.id
+                `,
+                [userId]
             )
 
             const query2 = promisePool.execute(
@@ -364,6 +365,27 @@ class UsersControllers {
             )
 
             res.json('Update comment sucessfully!')
+
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // [method: put], [router: /users/update-isread]
+    async updateIsread(req, res, next) {
+        try {
+            const { id } = req.body
+
+            const query = await promisePool.execute(
+                `
+                update notifycation set is_read = 1
+                WHERE id = ?
+                `,
+                [id]
+            )
+
+            res.status(200).json('Update isread succesfully!')
 
 
         } catch (err) {
@@ -599,7 +621,7 @@ class UsersControllers {
         }
     }
 
-    // [method: post], [router: /users/list-evaluate]
+    // [method: get], [router: /users/list-evaluate]
     async listEvaluate(req, res, next) {
         try {
 
@@ -607,6 +629,48 @@ class UsersControllers {
                 `
                 select id from evaluates
                 `
+            )
+
+            res.json(query[0])
+
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // [method: get], [router: /users/list-notification ]
+    async listNotification(req, res, next) {
+        try {
+
+            const { userId } = req.query
+
+            const query = await promisePool.execute(
+                `
+                select * from notifycation where userId = ? order by time desc
+                `,
+                [userId]
+            )
+
+            res.json(query[0])
+
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // [method: get], [router: /users/notification ]
+    async notification(req, res, next) {
+        try {
+
+            const { id } = req.query
+
+            const query = await promisePool.execute(
+                `
+                select * from notifycation where id = ?
+                `,
+                [id]
             )
 
             res.json(query[0])

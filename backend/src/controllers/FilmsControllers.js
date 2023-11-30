@@ -7,10 +7,10 @@ class FilmsControllers {
         try {
             const query1 = await promisePool.execute(
                 `
-                select f.id, f.name, f.image, f.seriesFilmLength, f.oddFilmLength, max(e.episode) as currentEpisode 
-                from episodeoffilm as e, films as f 
-                where e.filmID = f.id 
-                group by f.name, f.image, f.seriesFilmLength, f.id
+                select f.id, f.name, f.image, f.number_episodes, f.movie_duration,f.description, max(e.episode) as currentEpisode 
+                from episodeoffilm as e join films as f 
+                on e.filmID = f.id 
+                group by f.name, f.image, f.number_episodes, f.id
             `)
 
             const query2 = promisePool.execute(
@@ -58,53 +58,69 @@ class FilmsControllers {
             const querys = [
                 promisePool.execute(
                     `
-                    select fi.*, ep.status
-                    from films as fi, episodeoffilm as ep
-                    where fi.id = '${id}'
-                    and ep.filmId = '${id}'
-                    and ep.episode = (select max(episode) from episodeoffilm where filmId = '${id}')
-                `
+                    select *
+                    from films join episodeoffilm where films.id = ? and episodeoffilm.filmId = ?
+                    and episodeoffilm.episode = 1 and episodeoffilm.source_link = 'ophim'
+                `,
+                    [id, id]
                 ),
                 promisePool.execute(
                     `
-                    select ge.id, ge.genre from genreoffilm as geo, genres as ge
-                    where geo.genreId = ge.id
-                    and geo.filmId = '${id}'
-                `
+                    select max(episodeoffilm.episode) as maxCurrent from episodeoffilm join films
+                    on episodeoffilm.filmId = films.id
+                    and episodeoffilm.filmId = ?
+                `,
+                    [id]
                 ),
                 promisePool.execute(
                     `
-                    select count(ev.id) as count, round(avg(ev.point), 1) as avg
-                    from evaluateuseroffilm as evo, evaluates as ev
-                    where evo.filmId = '${id}' and evo.evaluateId = ev.id
-                    group by filmId
-                `
+                    select genres.genre from genreoffilm 
+                    join genres on genres.genre = genreoffilm.genreId
+                    where filmId = ?
+                `,
+                    [id]
                 ),
                 promisePool.execute(
                     `
-                    SELECT epo.episode, epo.videoLink from episodeoffilm as epo where epo.filmId = '${id}'
+                    select avg(evaluateuseroffilm.filmId) as avg, count(evaluateuseroffilm.filmId) as count
+                    from evaluateuseroffilm 
+                    join evaluates on evaluates.id = evaluateuseroffilm.evaluateId
+                    where evaluateuseroffilm.filmId = ?
+                    group by evaluateuseroffilm.filmId
+                `,
+                    [id]
+                ),
+                promisePool.execute(
+                    `
+                    SELECT epo.episode, epo.videoLink
+                    from episodeoffilm as epo
+                    where epo.filmId = ? and epo.source_link = 'ophim'
                     order by epo.episode desc
-                `
+                `,
+                    [id]
                 ),
                 promisePool.execute(
                     `
-                    select fi.id as currentFilmLink, fi.part as currentPart, 
-                    fi.movie as currentMovie, fir.part as relatedPart, 
-                    fir.movie as relatedMovie, fir.id as relatedFilmLink
+                    select fi.id as currentFilmLink, fi.part as currentPart, fir.part as relatedPart, 
+                    fir.id as relatedFilmLink
                     from relatedfilm as re, films as fi, films as fir
-                    where re.filmId = fi.id and re.filmId = '${id}'
+                    where re.filmId = fi.id and re.filmId = ?
                     and re.relatedfilmId = fir.id
-                `
+                `,
+                    [id]
                 ),
             ]
 
             Promise.all(querys).then((data) => {
+
+                // console.log('a', data[3][0])
                 const result = {
-                    inforFilm: data[0][0],
-                    genres: data[1][0],
-                    mediumPoint: data[2][0],
-                    episodeFilm: data[3][0],
-                    relatedFilm: data[4][0]
+                    inforFilm: data[0][0][0],
+                    maxCurrent: data[1][0][0].maxCurrent,
+                    genres: data[2][0],
+                    mediumPoint: data[3][0],
+                    episodeFilm: data[4][0],
+                    relatedFilm: data[5][0],
                 }
                 res.json(result)
             })
@@ -280,35 +296,35 @@ class FilmsControllers {
             const yearsQuery = years && "('" + years.join("', '") + "')";
 
             if (status === '1')
-                status = 'and max(ep.episode) = fi.seriesFilmLength'
+                status = 'and max(ep.episode) = fi.number_episodes'
             else if (status === '0')
-                status = 'and max(ep.episode) != fi.seriesFilmLength'
+                status = 'and max(ep.episode) != fi.number_episodes'
 
             let query1 =
                 `
-                select fi.name, max(ep.episode) as currentEpisode, fi.oddFilmLength,
-                fi.seriesFilmLength, fi.image, fi.id, fi.year
+                select fi.name, max(ep.episode) as currentEpisode,
+                fi.number_episodes, fi.image, fi.id, fi.year
                 from films as fi join episodeoffilm as ep on fi.id = ep.filmId
                 where id in (select genreoffilm.filmId from genreoffilm join  genres
-                on genreoffilm.genreId = genres.id
+                on genreoffilm.genreId = genres.genre
                 where genres.genre
                 in ${genresQuery}
                 group by genreoffilm.filmId
                 having count(genreoffilm.filmId) = ${genres ? genres.length : 5})
                 and fi.year in ${yearsQuery || '(select year from films)'}
-                group by fi.name, fi.oddFilmLength,
-                fi.seriesFilmLength, fi.image, fi.id
+                group by fi.name,
+                fi.number_episodes, fi.image, fi.id
                 having max(ep.episode) >= ${minEpisode || '0'}
                 ${status || ''}
             `
             let query2 =
                 `
-                select fi.name, max(ep.episode) as currentEpisode, fi.oddFilmLength,
-                fi.seriesFilmLength, fi.image, fi.year, fi.id
+                select fi.name, max(ep.episode) as currentEpisode,
+                fi.number_episodes, fi.image, fi.year, fi.id
                 from films as fi join episodeoffilm as ep on fi.id = ep.filmId
                 where fi.year in ${yearsQuery || '(select year from films)'}
-                group by fi.id, fi.name, fi.oddFilmLength,
-                fi.seriesFilmLength, fi.image, fi.year
+                group by fi.id, fi.name,
+                fi.number_episodes, fi.image, fi.year
                 having count(ep.episode) >= ${minEpisode || '0'}
                 ${status || ''}
             `
@@ -329,7 +345,7 @@ class FilmsControllers {
 
             const query1 = promisePool.execute(
                 `
-                select * from genres order by id
+                select * from genres order by genre
                 `
             )
 
@@ -360,7 +376,7 @@ class FilmsControllers {
 
             const query = await promisePool.execute(
                 `
-                select episodeoffilm.filmId, films.name, films.seriesFilmLength, films.oddFilmLength, films.image, max(episodeoffilm.episode) as maxEpisode
+                select episodeoffilm.filmId, films.name, films.number_episodes, films.image, max(episodeoffilm.episode) as maxEpisode
                 from episodeoffilm
                 join films on films.id = episodeoffilm.filmId
                 where episodeoffilm.filmId in
@@ -371,7 +387,7 @@ class FilmsControllers {
                 group by viewsoffilm.filmId
                 order by count(filmId) desc
                 limit 10) temp_table)
-                group by episodeoffilm.filmId, films.name, films.seriesFilmLength, films.oddFilmLength, films.image
+                group by episodeoffilm.filmId, films.name, films.number_episodes, films.image
                 `
             )
 
@@ -389,11 +405,11 @@ class FilmsControllers {
 
             const query = await promisePool.execute(
                 `
-                select episodeoffilm.filmId, films.name, films.seriesFilmLength, films.oddFilmLength, films.image, max(episodeoffilm.episode) as maxEpisode
+                select episodeoffilm.filmId, films.name, films.number_episodes, films.image, max(episodeoffilm.episode) as maxEpisode
                 from episodeoffilm
                 join films on films.id = episodeoffilm.filmId
                 where films.name in (select name from films where name like '%${name}%')
-                group by episodeoffilm.filmId, films.name, films.seriesFilmLength, films.oddFilmLength, films.image
+                group by episodeoffilm.filmId, films.name, films.number_episodes, films.image
                 `
             )
 

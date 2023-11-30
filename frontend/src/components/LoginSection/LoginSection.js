@@ -19,7 +19,6 @@ function LoginSection() {
 
     useEffect(() => {
         const decodededToken = jwtDecode(inforUsers.accestoken)
-        console.log('decodededToken', Boolean(0))
 
         const currentToken = new Date(decodededToken.exp * 1000).getTime()
         const currentTime = new Date().getTime()

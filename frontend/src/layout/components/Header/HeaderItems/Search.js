@@ -85,7 +85,7 @@ function Search({ show }) {
                                     setSearchValue('')
                                 }} href={`/movie-information?filmId=${item.filmId}`} className={cx('conver-page-search')}>
                                     <div className={cx('wrap-avartar')}>
-                                        <img alt='avata' src={`https://i.ytimg.com/vi/${item.image}/mqdefault.jpg`} />
+                                        <img alt='avata' src={item.image} />
                                     </div>
 
                                     <div className={cx('details')}>

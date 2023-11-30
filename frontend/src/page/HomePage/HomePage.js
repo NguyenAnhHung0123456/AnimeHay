@@ -41,7 +41,7 @@ function HomePage() {
       {inforUsers && <LoginSection />}
 
       {/* test page */}
-      <Link style={{ 'fontSize': '24px', 'padding': '24px', 'color': 'red' }} to='/test'>trang test</Link>
+      <Link style={{ 'fontSize': '24px', 'padding': '0 12px', 'color': 'red', 'display': 'block' }} to='/test'>trang test</Link>
 
       {/* nominated-movie */}
       < StylesMovie content='Phim đề cử' />

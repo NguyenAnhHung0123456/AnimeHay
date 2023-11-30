@@ -39,7 +39,6 @@ function FilterMoviePage() {
   // api render data
   const [data, setData] = useState()
   const [query, setQuery] = useState(() => {
-
     return {
       genres: genre || undefined,
       years: year || undefined,
@@ -63,6 +62,7 @@ function FilterMoviePage() {
 
   // render data
   useEffect(() => {
+    console.log('query', query)
     async function getUser() {
       try {
         const response = await axios.get(`http://127.0.0.1:4000/films/filter-film/filtered-film`, {
@@ -81,6 +81,8 @@ function FilterMoviePage() {
     async function getUser() {
       try {
         const response = await axios.get(`http://127.0.0.1:4000/films/filter-film/filter-list`)
+
+        console.log('res', response.data)
         setFilter(response.data)
       } catch (error) {
         console.error(error);

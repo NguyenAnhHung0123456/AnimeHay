@@ -22,6 +22,8 @@ const usersRouter = () => {
     router.get('/followed-film', UsersControllers.followedFilm)
     router.get('/followed-only-film', UsersControllers.followedOnlyFilm)
     router.get('/list-evaluate', UsersControllers.listEvaluate)
+    router.get('/list-notification', UsersControllers.listNotification)
+    router.get('/notification', UsersControllers.notification)
 
     // post
     router.post('/log-in', UsersControllers.login)
@@ -38,7 +40,9 @@ const usersRouter = () => {
     // put
     // change password
     router.put('/change-password', UsersControllers.changePassword)
+    router.put('/change-password', UsersControllers.changePassword)
     router.put('/change-comment', UsersControllers.changeComment)
+    router.put('/update-isread', UsersControllers.updateIsread)
     router.put('/change-rep-comment', UsersControllers.changeRepComment)
     router.put('/forgot-password', UsersControllers.forgotPassword)
     // update password while forgot password

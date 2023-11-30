@@ -32,7 +32,6 @@ const LoginWithGoogle = () => {
     useEffect(
         () => {
             if (user) {
-                console.log('a', user.access_token)
                 axios
                     .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
                         headers: {
@@ -43,24 +42,24 @@ const LoginWithGoogle = () => {
                     .then((res) => {
                         setProfile(res.data);
 
-                        console.log('xin chao')
+                        async function getUser() {
+                            try {
+                                const response = await axios.post(`http://localhost:4000/users/log-in-google`, {
+                                    ...res.data
+                                })
 
-                        // async function getUser() {
-                        //     try {
-                        //         const response = await axios.post(`http://localhost:4000/users/log-in-google`, {
-                        //             ...res.data
-                        //         })
+                                dispatch(login(response.data))
+                                navigate('/')
 
-                        //         dispatch(login(response.data))
-                        //         navigate('/')
-
-                        //     } catch (error) {
-                        //         console.error(error);
-                        //     }
-                        // }
-                        // getUser()
+                            } catch (error) {
+                                console.error(error);
+                            }
+                        }
+                        getUser()
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => {
+                        console.log(err)
+                    });
             }
         },
         [user]

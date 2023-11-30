@@ -19,8 +19,6 @@ let cx = classNames.bind(styles);
 function LogInPage() {
   const [errorLogin, setErrorLogin] = useState()
 
-  axios.defaults.withCredentials = true
-
   // use dispatch
   const dispatch = useDispatch()
 
@@ -41,7 +39,7 @@ function LogInPage() {
       try {
         const response = await axios.post(`http://localhost:4000/users/log-in`, {
           ...data
-        });
+        }, { withCredentials: true });
 
         const result = response.data
         if (result === 'Account not found!') {

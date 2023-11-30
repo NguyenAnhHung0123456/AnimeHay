@@ -22,19 +22,19 @@ const PostTime = (time) => {
             } else {
                 return '1 giây trước'
             }
-            break;
+        // break;
         case diff < 8:
             return diff + ' ngày trước'
-            break;
+        // break;
         case diff < 31:
             return end.diff(start, 'weeks') + ' tuần trước'
-            break;
+        // break;
         case diff < 365:
             return end.diff(start, 'months') + ' tháng trước'
-            break;
+        // break;
         case diff >= 365:
             return start.format('DD/MM/YYYY')
-            break;
+        // break;
         default:
             console.log('sai')
     }
