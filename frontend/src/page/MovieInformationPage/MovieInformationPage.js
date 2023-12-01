@@ -61,6 +61,38 @@ function MovieInformationPage() {
     </div>
   )
 
+  useEffect(() => {
+    const getData = async function () {
+      try {
+        const response1 = axios.get(`http://127.0.0.1:4000/films/infor-film`, {
+          params: {
+            filmId: query
+          }
+        });
+
+        const response2 = axios.get(`http://127.0.0.1:4000/users/followed-only-film`, {
+          params: {
+            filmId: query,
+            userId: inforUsers === null ? null : inforUsers?.id
+          }
+        });
+
+
+        Promise.all([response1, response2]).then(([response1, response2]) => {
+
+          setData(response1.data)
+          setFollowed(response2.data)
+        })
+
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getData()
+
+  }, [query])
+
   // create displayMsg
   const displayMsg = (action) => {
     switch (action) {
@@ -101,7 +133,7 @@ function MovieInformationPage() {
     try {
       const response = await axios.post(`http://127.0.0.1:4000/users/add-follow`, {
         filmId: query,
-        userId: inforUsers.id === null ? 0 : inforUsers.id
+        userId: inforUsers?.id === null ? 0 : inforUsers?.id
       })
       if (response.data === 'Sucess') {
         displayMsg('addFollow')
@@ -118,7 +150,7 @@ function MovieInformationPage() {
       const response = await axios.delete(`http://127.0.0.1:4000/users/remote-follow`, {
         data: {
           filmId: query,
-          userId: inforUsers.id === null ? 0 : inforUsers.id
+          userId: inforUsers?.id === null ? 0 : inforUsers?.id
 
         }
       })
@@ -132,32 +164,6 @@ function MovieInformationPage() {
     }
   }
 
-  useEffect(() => {
-    const getData = async function () {
-      try {
-        const response1 = axios.get(`http://127.0.0.1:4000/films/infor-film?filmId=${query}`);
-
-        const response2 = axios.get(`http://127.0.0.1:4000/users/followed-only-film`, {
-          params: {
-            filmId: query,
-            userId: inforUsers.id === null ? 0 : inforUsers.id
-          }
-        });
-
-        Promise.all([response1, response2]).then(([response1, response2]) => {
-          setData(response1.data)
-          setFollowed(response2.data)
-        })
-
-
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getData()
-
-  }, [query])
-
   return (
     <div className={cx('movie-information')}>
 
@@ -166,16 +172,16 @@ function MovieInformationPage() {
 
       {/* infor-movie */}
       <div className={cx('wrap-infor-movie')}>
-        <h2>{data?.inforFilm?.name}</h2>
+        <h2>{data?.infor_film?.name}</h2>
         <div className={cx('infor-movie')}>
           <div className={cx('img')}>
-            <img alt='xin chao' src={data?.inforFilm?.image} />
+            <img alt='xin chao' src={data?.infor_film?.image} />
           </div>
           <div className={cx('wrap-row')}>
             <div className={cx('row')}>
               <div className={cx('column-1')}>Thể loại</div>
               <div className={cx('column-2')}>
-                {data?.genres.map((genre, index) => (
+                {data?.genres?.map((genre, index) => (
                   <button key={index}>{genre.genre}</button>
                 ))}
               </div>
@@ -183,16 +189,16 @@ function MovieInformationPage() {
             <div className={cx('row')}>
               <div className={cx('column-1')}>Trạng thái</div>
               <div className={cx('column-2')}>
-                <span>{data?.inforFilm?.number_episodes === +data?.maxCurrent ? 'Đã hoàn thành' : 'Đang tiến hành'}</span>
+                <span>{data?.infor_film?.number_episodes === +data?.max_current ? 'Đã hoàn thành' : 'Đang tiến hành'}</span>
               </div>
             </div>
             <div className={cx('row')}>
               <div className={cx('column-1')}>Điểm</div>
               <div className={cx('column-2')}>
                 <span>
-                  {(data?.mediumPoint.length === 1) ? data.mediumPoint[0].avg : 0}
+                  {(data?.medium_point !== undefined) ? data?.medium_point.avg : 0}
                   ||
-                  {data?.mediumPoint.length === 1 ? data.mediumPoint[0].count : 0}
+                  {data?.medium_point !== undefined ? data?.medium_point.count : 0}
                   đánh giá
                 </span>
               </div>
@@ -201,18 +207,18 @@ function MovieInformationPage() {
               <div className={cx('column-1')}>Phát hành
               </div>
               <div className={cx('column-2')}>
-                <span>{data?.inforFilm?.year}</span>
+                <span>{data?.infor_film?.year}</span>
               </div>
             </div>
             <div className={cx('row')}>
               <div className={cx('column-1')}>Thời lượng
               </div>
               <div className={cx('column-2')}>
-                {data && <span>{data.inforFilm?.movie_duration === null
+                {data && <span>{data?.infor_film?.movie_duration === null
                   ?
                   '??'
                   :
-                  (data.inforFilm?.movie_duration)
+                  (data?.infor_film?.movie_duration)
                 }</span>}
               </div>
             </div>
@@ -221,10 +227,11 @@ function MovieInformationPage() {
       </div>
 
       {/* status-play */}
+
       <div className={cx('status-play')}>
         <div className={cx('before')}>
           {data && <Link
-            to={`/watch-movie?id=${data.inforFilm.id}&episode=${data.episodeFilm[data.episodeFilm.length - 1].episode}`}
+            to={`/watch-movie?id=${data?.infor_film?.film_id}&episode=${data.episode_film[data.episode_film?.length - 1]?.episode}`}
             style={{ 'background': '#25867d' }}
             onClick={() => {
               window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
@@ -234,7 +241,7 @@ function MovieInformationPage() {
             <FontAwesomeIcon icon={faCirclePlay} />
           </Link>}
           {inforUsers ?
-            (followed.length === 0 ?
+            (followed?.length === 0 ?
               (<div style={{ 'background': '#369e69' }} className={cx('play')} onClick={handleAddFollow}>
                 <FontAwesomeIcon icon={faFileCirclePlus} />
               </div>)
@@ -273,18 +280,18 @@ function MovieInformationPage() {
       </div>
 
       {/* part-of-movie */}
-      {data?.relatedFilm.length !== 0 &&
+      {data?.related_film?.length !== 0 &&
         <div className={cx('part-of-movie')}>
           <h2>Phim liên quan</h2>
 
           <div className={cx('wrap-btn')}>
-            {data?.relatedFilm.map((item, index) => (
+            {data?.related_film?.map((item, index) => (
               <div key={index}>
 
-                <Link key={item?.relatedFilmLink}
-                  to={`/movie-information?filmId=${item?.relatedFilmLink}`}
+                <Link key={item?.related_film_link}
+                  to={`/movie-information?filmId=${item?.related_film_link}`}
                   onClick={() => {
-                    setQuery(item.relatedFilmLink)
+                    setQuery(item?.related_film_link)
                     window.scrollTo({
                       top: 0,
                       left: 0,
@@ -292,7 +299,7 @@ function MovieInformationPage() {
                     });
                   }}
                 >
-                  {item?.relatedPart}
+                  {item?.related_part}
                 </Link>
               </div>
             ))}
@@ -305,16 +312,16 @@ function MovieInformationPage() {
         <div className={cx('column-1')}>
           <span>Danh sách tập</span>
           <div>
-            {data?.episodeFilm.map((item, index) => {
+            {data?.episode_film?.map((item, index) => {
               return (<Link
                 key={index}
-                to={`/watch-movie?id=${data.inforFilm.id}&episode=${item.episode}`}
+                to={`/watch-movie?id=${data?.infor_film?.film_id}&episode=${item.episode}`}
                 onClick={() => {
                   window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
                 }}
               >
                 {
-                  data?.inforFilm.number_episodes === 1 ?
+                  data?.infor_film?.number_episodes === 1 ?
                     'Full'
                     :
                     item.episode
@@ -325,7 +332,7 @@ function MovieInformationPage() {
         </div>
         <div className={cx('column-2')}>
           <span>Nội dung</span>
-          {data && <div>{data.inforFilm?.description}</div>}
+          {data && <div>{data?.infor_film?.description}</div>}
         </div>
       </div>
 
@@ -334,7 +341,7 @@ function MovieInformationPage() {
         url={`http://127.0.0.1:4000/films/comment-film?filmId=${query}`}
         url2={`http://127.0.0.1:4000/films/rep-comment?filmId=${query}`}
         filmId={query}
-        userId={inforUsers.id}
+        userId={inforUsers?.id}
         episode={minEpisode}
       />
 

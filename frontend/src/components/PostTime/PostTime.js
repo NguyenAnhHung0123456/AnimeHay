@@ -3,8 +3,6 @@ import momentDurationFormatSetup from 'moment-duration-format';
 momentDurationFormatSetup(moment)
 
 const PostTime = (time) => {
-    const getTime = new Date(time)
-
     let start = time === false ? moment() : moment(`${time}`);
     const end = moment();
 

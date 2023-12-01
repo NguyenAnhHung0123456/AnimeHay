@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import styles from './AddFilmPage.module.scss'
 import { useSelector } from 'react-redux';
@@ -9,9 +8,21 @@ import { jwtDecode } from 'jwt-decode';
 
 let cx = classNames.bind(styles);
 
-function AddFilmPage() {
-  // use navigate
-  const navigate = useNavigate()
+const AddFilmPage = async () => {
+
+  // use selector
+  const inforUsers = useSelector(state => (state.user.value))
+  // console.log('inforUsers', inforUsers?.accestoken);
+
+  // check admin
+  if (!inforUsers) {
+    window.location.href = '/'
+  } else {
+    const tokenDecode = jwtDecode(inforUsers?.accestoken)
+    if (!tokenDecode.admin) {
+      window.location.href = '/'
+    }
+  }
 
   const [data, setData] = useState()
 
@@ -22,15 +33,6 @@ function AddFilmPage() {
   const [filmThumbnail, setFilmThumbnail] = useState(null)
   const [filmPart, setFilmPart] = useState(null)
   const [selectGenre, setSelectGenre] = useState([])
-
-  // use selector
-  const inforUsers = useSelector(state => (state.user.value))
-
-  // check admin
-  const tokenDecode = jwtDecode(inforUsers.accestoken)
-  if (!tokenDecode.admin) {
-    navigate('/')
-  }
 
   useEffect(() => {
     async function getUser() {

@@ -87,7 +87,7 @@ class AdminControllers {
 
             await promisePool.execute(
                 `
-                 insert genreoffilm (filmId, genreId)
+                 insert genre_film (film_id, genre_id)
                     values 
                     ${genre.join(', ')}
                  `,
@@ -128,7 +128,7 @@ class AdminControllers {
             // check source of film
             const checkEpisodeFilm = await promisePool.execute(
                 `
-                select episode from episodeoffilm where filmId = ? and episode = ? and source_link = ?
+                select episode from episodeoffilm where film_id = ? and episode = ? and source_link = ?
                 `,
                 [filmId, filmEpisode, filmSource]
             )
@@ -140,7 +140,7 @@ class AdminControllers {
             // check video of episode film
             const checkVideoLink = await promisePool.execute(
                 `
-                select episode from episodeoffilm where filmId = ? and videoLink = ?
+                select episode from episodeoffilm where film_id = ? and videoLink = ?
                 `,
                 [filmId, videoLink]
             )
@@ -152,7 +152,7 @@ class AdminControllers {
             // insert episode of film
             await promisePool.execute(
                 `
-                insert episodeoffilm (episode, filmId, videoLink, source_link)
+                insert episodeoffilm (episode, film_id, videoLink, source_link)
                 values 
                 (?, ?, ?, ?)
                 `,

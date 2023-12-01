@@ -8,11 +8,11 @@ class TestControllers {
         try {
             const a = await promisePool.execute(
                 `
-                    select avg(evaluateuseroffilm.filmId) as avg, count(evaluateuseroffilm.filmId) as count
+                    select avg(evaluateuseroffilm.film_id) as avg, count(evaluateuseroffilm.film_id) as count
                     from evaluateuseroffilm 
                     join evaluates on evaluates.id = evaluateuseroffilm.evaluateId
-                    where evaluateuseroffilm.filmId = ?
-                    group by evaluateuseroffilm.filmId
+                    where evaluateuseroffilm.film_id = ?
+                    group by evaluateuseroffilm.film_id
                 `,
                 [7]
             )

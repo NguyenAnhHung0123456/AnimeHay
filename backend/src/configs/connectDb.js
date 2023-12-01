@@ -4,7 +4,7 @@ import mysql from 'mysql2'
 const pool = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    database: 'moviewebsitedb',
+    database: 'test_phim_db',
     password: 'Dangkymkmsql@1234',
     waitForConnections: true,
     connectionLimit: 10,

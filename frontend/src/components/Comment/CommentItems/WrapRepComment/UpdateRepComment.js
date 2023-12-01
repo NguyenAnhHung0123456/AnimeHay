@@ -8,9 +8,9 @@ import Emoji from "../../../Emoji"
 const cx = classNames.bind(styles)
 
 const UpdateRepComment = ({
-    result,
     rerender,
     setRerender,
+    result,
     setCommentRepId,
     setValueUpdateRepComment,
     valueUpdateRepComment,
@@ -48,6 +48,7 @@ const UpdateRepComment = ({
                 value={valueUpdateRepComment}
                 onChange={e => {
                     setValueUpdateRepComment(e.target.value)
+
                 }}
                 spellCheck={false} placeholder='Nhập bình luận của bạn tại đây'
             />
@@ -65,7 +66,7 @@ const UpdateRepComment = ({
                         Hủy
                     </span>
                     <span className={cx('save')} onClick={() => {
-                        handleUpdateRepComment(result.commentRepId, valueUpdateRepComment)
+                        handleUpdateRepComment(result.comment_rep_id, valueUpdateRepComment)
                     }}>
                         Lưu
                     </span>

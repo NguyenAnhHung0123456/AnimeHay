@@ -98,11 +98,11 @@ function WatchMoviePage() {
       <div className={cx('movie-details')}>
         <div className={cx('first')}>
           <FontAwesomeIcon icon={faClapperboard} />
-          {data && <div>{data.inforFilm.name}</div>}
+          <div>{data?.infor_film?.name}</div>
         </div>
         <div className={cx('second')}>
-          {data && <span>Đang xem tập {data.inforFilm.episode !== 10000 ? (data.inforFilm.episode) : 'Full'}</span>}
-          {data && <span>{PostTime(data.inforFilm.timeUpLoad)}</span>}
+          <span>Đang xem tập {data?.infor_film?.episode !== 10000 ? (data?.infor_film?.episode) : 'Full'}</span>
+          <span>{data && PostTime(data.infor_film.time_upLoad)}</span>
         </div>
       </div>
 
@@ -119,9 +119,9 @@ function WatchMoviePage() {
 
       {/* how-episode */}
       <div className={cx('how-episode')}>
-        {data && <div className={cx('first')}>
-          Tập  {data.inforFilm.episode !== 10000 ? (data.inforFilm.episode) : 'Full'}
-        </div>}
+        <div className={cx('first')}>
+          Tập  {data.infor_film?.episode !== 10000 ? (data.infor_film?.episode) : 'Full'}
+        </div>
         <div className={cx('second')}>
           <div style={{ 'backgroundColor': '#795548' }}>
             <FontAwesomeIcon icon={faCircleExclamation} />
@@ -138,15 +138,16 @@ function WatchMoviePage() {
           setServer('ophim')
         }} mini content='Ophim' style={server === 'ophim' ? { 'background': 'red', 'color': '#fff' } : { 'background': '#fff', 'color': '#000' }} />
 
-        {data && data.inforFilm.phimgiff && <Button onClick={() => {
+        {data && data.infor_film?.phimgiff && <Button onClick={() => {
           setServer('phimgiff')
         }} mini content='Phimgiff' style={server === 'phimgiff' ? { 'background': 'red', 'color': '#fff' } : { 'background': '#fff', 'color': '#000' }} />}
       </div>
 
       {/* video */}
       <div className={cx('video')}>
-        {data && <iframe width="640" allowFullScreen={true} frameBorder='0' height="360" src={data.inforFilm[server]} title={data.inforFilm.name} />}
+        {data && <iframe width="640" allowFullScreen={true} frameBorder='0' height="360" src={data.infor_film[server]} title={data.infor_film?.name} />}
       </div>
+
       {/* option */}
       <div className={cx('option')}>
         <Button fa={<FontAwesomeIcon icon={faGear} />} style={{ background: '#25867d', 'fontSize': '1.4rem', padding: '10px 12px' }} />
@@ -157,7 +158,7 @@ function WatchMoviePage() {
           (data.nextFilm !== undefined ?
             (<Button fa={<FontAwesomeIcon
               icon={faChevronCircleRight} />}
-              to={`/watch-movie?id=${data.inforFilm.id}&episode=${data.nextFilm.episode}`}
+              to={`/watch-movie?id=${data.infor_film.id}&episode=${data.nextFilm.episode}`}
               onClick={() => {
                 setEpisode(data.nextFilm.episode)
               }}
@@ -187,11 +188,10 @@ function WatchMoviePage() {
         <div className={cx('before')}>Danh sách tập</div>
         <div className={cx('after')}>
           <div>
-            {data && data.listFilm.map((item, index) => {
-
+            {data && data.list_film?.map((item, index) => {
               return (< Link key={index}
                 style={item.episode === +episode ? { 'backgroundColor': '#bb6464' } : {}}
-                to={`/watch-movie?id=${data.inforFilm.id}&episode=${item.episode}`}
+                to={`/watch-movie?id=${data.infor_film.id}&episode=${item.episode}`}
                 onClick={() => {
                   window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
                   setEpisode(item.episode)
@@ -205,33 +205,15 @@ function WatchMoviePage() {
         </div>
       </div>
 
-      {/* follow-fb */}
-      <div className={cx('follow-fb')}>
-        <div className={cx('wrap-follow-fb')}>
-          <div className={cx('logo')}>
-            <img alt='logo' src='admid_fb.jpg' />
-          </div>
-          <div className={cx('details')}>
-            <a href='https://www.facebook.com/' >Animehay.Live - Anime HD Vietsub</a>
-            <div className={cx('wrap-fb')}>
-              <div className={cx('fb')}>
-                <FontAwesomeIcon icon={faFacebook} />
-                <span>Follow Page</span>
-              </div>
-              <span className={cx('followed')}>3.6K followers</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Comment */}
+      {console.log('id', inforUsers?.id)}
       {
         data && (<Comment
-          url={`http://127.0.0.1:4000/films/comment-episode-film/${data.inforFilm.id}/${data.inforFilm.episode}`}
-          url2={`http://127.0.0.1:4000/films/rep-episode-comment/${data.inforFilm.id}/${data.inforFilm.episode}`}
+          url={`http://127.0.0.1:4000/films/comment-episode-film/${data.infor_film.id}/${data.infor_film.episode}`}
+          url2={`http://127.0.0.1:4000/films/rep-episode-comment/${data.infor_film.id}/${data.infor_film.episode}`}
           filmId={id}
           episode={episode}
-          userId={inforUsers.id}
+          userId={inforUsers?.id}
         />)
       }
 

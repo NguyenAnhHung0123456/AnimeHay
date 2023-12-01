@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import styles from './ListFilmPage.module.scss'
 import { useSelector } from 'react-redux';
@@ -12,16 +12,18 @@ let cx = classNames.bind(styles);
 function ListFilmPage() {
   const [data, setData] = useState()
 
-  // use navigate
-  const navigate = useNavigate()
-
   // use selector
   const inforUsers = useSelector(state => (state.user.value))
+  // console.log('inforUsers', inforUsers?.accestoken);
 
   // check admin
-  const tokenDecode = jwtDecode(inforUsers.accestoken)
-  if (!tokenDecode.admin) {
-    navigate('/')
+  if (!inforUsers) {
+    window.location.href = '/'
+  } else {
+    const tokenDecode = jwtDecode(inforUsers?.accestoken)
+    if (!tokenDecode.admin) {
+      window.location.href = '/'
+    }
   }
 
   useEffect(() => {
@@ -66,7 +68,7 @@ function ListFilmPage() {
                 </div>
                 <div className={cx('wrap-episode-new')}>
                   <span className={cx('name')}>Tập mới nhất</span>
-                  <span className={cx('episode-current')}>{item.currentEpisode}</span>
+                  <span className={cx('episode-current')}>{item.current_episode}</span>
                 </div>
                 <div className={cx('wrap-movie-duration')}>
                   <span className={cx('name')}>Thời lượng phim</span>

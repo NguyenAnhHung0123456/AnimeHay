@@ -62,7 +62,6 @@ function FilterMoviePage() {
 
   // render data
   useEffect(() => {
-    console.log('query', query)
     async function getUser() {
       try {
         const response = await axios.get(`http://127.0.0.1:4000/films/filter-film/filtered-film`, {
@@ -81,8 +80,6 @@ function FilterMoviePage() {
     async function getUser() {
       try {
         const response = await axios.get(`http://127.0.0.1:4000/films/filter-film/filter-list`)
-
-        console.log('res', response.data)
         setFilter(response.data)
       } catch (error) {
         console.error(error);
@@ -289,13 +286,15 @@ function FilterMoviePage() {
             <span>Năm</span>
             <FontAwesomeIcon icon={faChevronDown} />
           </div>
+
           <div
             onClick={handleShowMinEpisodes}
-            style={showMinEpisodes === true ? { 'backgroundColor': 'rgb(58, 121, 175)' } : {}} s
+            style={showMinEpisodes === true ? { 'backgroundColor': 'rgb(58, 121, 175)' } : {}}
           >
             <span>Số tập</span>
             <FontAwesomeIcon icon={faChevronDown} />
           </div>
+
           <div
             onClick={handleShowStatus}
             style={showStatus === true ? { 'backgroundColor': 'rgb(58, 121, 175)' } : {}}
@@ -304,9 +303,11 @@ function FilterMoviePage() {
             <FontAwesomeIcon icon={faChevronDown} />
           </div>
         </div>
+
         {(showGenre || showYear || showMinEpisodes || showStatus) && <div className={cx('after')}>
+
           {/* movie genre */}
-          {showGenre && <div className={cx('option')}>
+          {/* {showGenre && <div className={cx('option')}>
             <div className={cx('content')}>Thể loại</div>
             <div className={cx('movie-genre')}>
               {filter && filter.genres.map((item, index) => (
@@ -319,10 +320,10 @@ function FilterMoviePage() {
                 </Link>
               ))}
             </div >
-          </div>}
+          </div>} */}
 
           {/* year */}
-          {showYear && <div className={cx('option')}>
+          {/* {showYear && <div className={cx('option')}>
             <div className={cx('content')}>Năm phát hành</div>
             <div className={cx('movie-genre')}>
               {filter && filter.years.map((item, index) => (
@@ -338,10 +339,10 @@ function FilterMoviePage() {
                 </Link>
               ))}
             </div>
-          </div>}
+          </div>} */}
 
           {/* episodes */}
-          {showMinEpisodes && <div className={cx('option')}>
+          {/* {showMinEpisodes && <div className={cx('option')}>
             <div className={cx('content')}>Số tập ít nhất</div>
             <div className={cx('movie-genre')}>
               <button
@@ -421,10 +422,10 @@ function FilterMoviePage() {
                 4
               </button>
             </div>
-          </div>}
+          </div>} */}
 
           {/* status */}
-          {showStatus && <div className={cx('option')}>
+          {/* {showStatus && <div className={cx('option')}>
             <div className={cx('content')}>Trạng thái</div>
             <div className={cx('movie-genre')}>
               <Link
@@ -447,13 +448,13 @@ function FilterMoviePage() {
                 Hoàn thành</
               Link>
             </div>
-          </div>}
+          </div>} */}
 
           {/* button-filter */}
-          <button className={cx('button-filter')} onClick={handleInforFilter} >
+          {/* <button className={cx('button-filter')} onClick={handleInforFilter} >
             <FontAwesomeIcon icon={faFilter} />
             <span>Lọc</span>
-          </button>
+          </button> */}
         </div >}
       </div >
 
@@ -473,12 +474,16 @@ function FilterMoviePage() {
       </div>
 
       {/* Paginate */}
+
       {data && <Paginate items={data} />}
 
+
       {/* read-story */}
+
       <WrapComponentEmpty>
         <Button content='Đọc truyện chữ' border={false} />
       </WrapComponentEmpty>
+
     </div >
   );
 }

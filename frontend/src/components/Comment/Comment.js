@@ -16,6 +16,7 @@ import DeleteComment from './CommentItems/WrapComment/DeleteComment';
 import AddRepComment from './CommentItems/WrapRepComment/AddRepComment';
 import DeleteRepComment from './CommentItems/WrapRepComment/DeleteRepComment';
 import UpdateRepComment from './CommentItems/WrapRepComment/UpdateRepComment';
+import Lever from '../Lever/Lever';
 
 let cx = classNames.bind(styles);
 
@@ -63,6 +64,7 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                 const response2 = axios.get(`${url2}`);
 
                 Promise.all([response, response2]).then(([response, response2]) => {
+                    console.log('res', response.data)
                     setItems(response.data)
                     setRepComment(response2.data)
                 })
@@ -128,7 +130,7 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                     <div className={cx('infor-user-name')}>
                                         <div className={cx('before')}>
                                             <span className={cx('user-name')}>{item.name}</span>
-                                            <span className={cx('level')}>Lv.{item.lever}</span>
+                                            <span className={cx('level')}>{Lever(item.level)}</span>
                                         </div>
                                         {userId === item.userId &&
                                             (<div className={cx('editor-comment')}>
@@ -198,12 +200,12 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                     (
                                         <>
                                             {repComment.filter((itemRepComment, index) => {
-                                                return itemRepComment.idCommentFilm === item.id
+                                                return itemRepComment.id_comment_film === item.id
                                             }).map((result, index) => {
 
                                                 return (
                                                     <div className={cx('wrap-update-rep-comment')} key={index} >
-                                                        {result.commentRepId !== commentRepId ?
+                                                        {result.comment_rep_id !== commentRepId ?
                                                             <div className={cx('comment', 'rep-comment')}>
                                                                 <div className={cx('logo')}>
                                                                     <img alt='avata' src={`https://i.ytimg.com/vi/${result.avatar}/mqdefault.jpg`} />
@@ -212,11 +214,11 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                                                     <div className={cx('infor-user-name')}>
                                                                         <div className={cx('before')}>
                                                                             <span className={cx('user-name')}>{result.name}</span>
-                                                                            <span className={cx('level')}>Lv.{result.lever}</span>
+                                                                            <span className={cx('level')}>{Lever(result.level)}</span>
                                                                         </div>
-                                                                        {userId === result.userId &&
+                                                                        {userId === result.user_id &&
                                                                             (<div className={cx('editor-comment')}>
-                                                                                {(showEditorComment === result.commentRepId ?
+                                                                                {(showEditorComment === result.comment_rep_id ?
                                                                                     <div className={cx('after')}>
                                                                                         <FontAwesomeIcon className={cx('icon')} onClick={() => {
                                                                                             setShowEditorComment(false)
@@ -227,7 +229,7 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
 
                                                                                                 onClick={() => {
 
-                                                                                                    setCommentRepId(result.commentRepId)
+                                                                                                    setCommentRepId(result.comment_rep_id)
                                                                                                     setValueUpdateRepComment(result.content)
                                                                                                 }}
                                                                                             >
@@ -238,13 +240,13 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                                                                             </div>
 
                                                                                             {/* delete rep comment */}
-                                                                                            <DeleteRepComment />
+                                                                                            <DeleteRepComment result={result} rerender={rerender} setRerender={setRerender} />
 
                                                                                         </div>
                                                                                     </div>
                                                                                     :
                                                                                     <div className={cx('after')} onClick={() => {
-                                                                                        setShowEditorComment(result.commentRepId)
+                                                                                        setShowEditorComment(result.comment_rep_id)
                                                                                     }}>
                                                                                         <FontAwesomeIcon className={cx('icon')} icon={faChevronDown} />
                                                                                     </div>)}
@@ -259,7 +261,7 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                                                         {userId && (!showBlockRepComment
                                                                             ? (<span className={cx('rep')}
                                                                                 onClick={() => {
-                                                                                    setShowBlockRepComment(result.idCommentFilm)
+                                                                                    setShowBlockRepComment(result.id_comment_film)
                                                                                     setValueRepComment(`@${result.name} `)
                                                                                 }}>Trả lời</span>) :
                                                                             (<span className={cx('rep')}
@@ -274,12 +276,15 @@ function Comment({ itemsPerPage = 5, url, url2, filmId, episode, userId }) {
                                                             </div>
                                                             :
                                                             <UpdateRepComment
+                                                                rerender={rerender}
+                                                                setRerender={setRerender}
                                                                 valueUpdateRepComment={valueUpdateRepComment}
-                                                                setValueUpdateRepComment={setValueUpdateComment}
+                                                                setValueUpdateRepComment={setValueUpdateRepComment}
                                                                 setCommentRepId={setCommentRepId}
                                                                 result={result}
                                                             />
                                                         }
+
                                                     </div>
                                                 )
                                             })}

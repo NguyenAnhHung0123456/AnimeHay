@@ -31,7 +31,7 @@ function Profile() {
                     {inforUser && <img alt='avata' src={inforUser.avatar === null ? `https://i.ytimg.com/vi/idavatar/mqdefault.jpg` : inforUser.avatar} />}
                 </div>
 
-                {inforUser && <span>{Lever(inforUser.lever)}</span>}
+                {inforUser && <span>{Lever(inforUser.level)}</span>}
 
                 <button
                     onClick={() => {
@@ -69,7 +69,7 @@ function Profile() {
 
                     <div>
                         <span>Ngày tham gia</span>
-                        <div>{inforUser && PostTime(inforUser.registrationDate)}</div>
+                        <div>{inforUser && PostTime(inforUser.registration_date)}</div>
                     </div>
 
                     <div>

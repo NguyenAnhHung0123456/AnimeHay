@@ -1,18 +1,28 @@
 import classNames from 'classnames/bind';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import styles from './AddEpisodeFilm.module.scss'
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
-import { useMemo } from 'react';
 
 let cx = classNames.bind(styles);
 
 function AddEpisodeFilm() {
-  // use navigate
-  const navigate = useNavigate()
+
+  // use selector
+  const inforUsers = useSelector(state => (state.user.value))
+  // console.log('inforUsers', inforUsers?.accestoken);
+
+  // check admin
+  if (!inforUsers) {
+    window.location.href = '/'
+  } else {
+    const tokenDecode = jwtDecode(inforUsers?.accestoken)
+    if (!tokenDecode.admin) {
+      window.location.href = '/'
+    }
+  }
 
   const [filmName, setFilmName] = useState(() => {
     const queryName = new URLSearchParams(window.location.search)
@@ -27,15 +37,6 @@ function AddEpisodeFilm() {
   const [filmEpisode, setFilmEpisode] = useState('')
   const [videoLink, setVideoLink] = useState('')
   const [filmSource, setFilmSource] = useState('')
-
-  // use selector
-  const inforUsers = useSelector(state => (state.user.value))
-
-  // check admin
-  const tokenDecode = jwtDecode(inforUsers.accestoken)
-  if (!tokenDecode.admin) {
-    navigate('/')
-  }
 
   const handleAddFilm = (e) => {
     e.preventDefault()

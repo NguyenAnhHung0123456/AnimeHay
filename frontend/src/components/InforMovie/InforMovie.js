@@ -10,7 +10,7 @@ function InforMovie({
     src,
     onClick,
     currentEpisode = '??',
-    number_episodes = '??',
+    numberEpisodes = '??',
     id,
     mediumPoint,
     name = '?????' }) {
@@ -26,10 +26,10 @@ function InforMovie({
             <div {...props} className={cx('infor-movie')}>
                 <Link to={`/movie-information?filmId=${id}`} className={cx('container-img')}>
                     <img alt={`Ảnh anime ${name}`} src={`${src}`} />
-                    {number_episodes === 1 ?
+                    {numberEpisodes === 1 ?
                         (<span className={cx('episode')}>Full</span>)
                         :
-                        (<span className={cx('episode')}>{currentEpisode}/{number_episodes}</span>)
+                        (<span className={cx('episode')}>{currentEpisode}/{numberEpisodes || '??'}</span>)
                     }
                     {mediumPoint && <span className={cx('evaluate')}>{mediumPoint}</span>}
                     <h3>{name}</h3>

@@ -137,25 +137,30 @@ class UsersControllers {
             // check evaluate
             const checkEvaluate = await promisePool.execute(
                 `
-                select * from evaluateuseroffilm where filmId = '${filmId}' and userId = ${userId}
-                `
+                select * from evaluate_user_film where film_id = ? and user_id = ?
+                `,
+                [filmId, userId]
             )
+
+            console.log('checkEvaluate', checkEvaluate[0])
 
             if (checkEvaluate[0].length === 0) {
                 await promisePool.execute(
                     `
-                    insert evaluateuseroffilm (filmId, userId, evaluateId)
+                    insert evaluate_user_film (film_id, user_id, evaluate_id)
                     values 
-                    ( '${filmId}', ${userId}, ${evaluateId})
-                    `
+                    ( ?, ?, ? )
+                    `,
+                    [filmId, userId, evaluateId]
                 )
                 res.json('Add evaluate Sucess')
             } else {
                 await promisePool.execute(
                     `
-                    update evaluateuseroffilm set evaluateId = ${evaluateId}
-                    WHERE userId = ${userId} and filmId = '${filmId}'
-                    `
+                    update evaluate_user_film set evaluate_id = ?
+                    WHERE user_id = ? and film_id = ?
+                    `,
+                    [evaluateId, userId, filmId]
                 )
 
                 res.json('Update evaluate Sucess')
@@ -172,10 +177,11 @@ class UsersControllers {
 
             await promisePool.execute(
                 `
-                insert commentuseroffilm (filmId, userId, episode, content)
+                insert comment_user_film (film_id, user_id, episode, content)
                 values 
-                ('${filmId}', ${userId}, ${episode}, '${content}')
-                `
+                (?, ?, ?, ?)
+                `,
+                [filmId, userId, episode, content]
             )
 
             res.json('Add comment sucessfully!')
@@ -191,10 +197,11 @@ class UsersControllers {
 
             await promisePool.execute(
                 `
-                insert repcomment (userId, content, idCommentFilm)
+                insert rep_comment (user_id, content, id_comment_film)
                 values 
-                (${userId}, '${content}', ${idCommentFilm})
-                `
+                (?, ?, ?)
+                `,
+                [userId, content, idCommentFilm]
             )
 
             res.json('Add rep comment sucessfully!')
@@ -210,15 +217,16 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                select films.id, films.name, historyOfFilm.timeView, historyOfFilm.episode, historyOfFilm.userId, films.image
-                from historyOfFilm
-                join episodeoffilm on episodeoffilm.episode = historyOfFilm.episode and historyOfFilm.filmId = episodeoffilm.filmId
-                join users on historyOfFilm.userId = users.id
-                join films on historyOfFilm.filmId = films.id
-                where historyOfFilm.userId = ${userId}
-                order by historyOfFilm.timeView desc
+                select films.id, films.name, history_film.time_view, history_film.episode, history_film.user_id, films.image
+                from history_film
+                join episode_film on episode_film.episode = history_film.episode and history_film.film_id = episode_film.film_id
+                join users on history_film.user_id = users.id
+                join films on history_film.film_id = films.id
+                where history_film.user_id = ?
+                order by history_film.time_view desc
                 limit 10
-                `
+                `,
+                [userId]
             )
 
             res.json(query[0])
@@ -236,12 +244,12 @@ class UsersControllers {
             const query1 = promisePool.execute(
                 `
                 select films.name, films.description, films.movie_duration, films.number_episodes, films.year, films.image, films.id,
-                max(episodeoffilm.episode) as currentEpisode
-                from followedFilm
-                join users on users.id = followedFilm.userId
-                join films on films.id = followedFilm.filmId
-                join episodeoffilm on films.id = episodeoffilm.filmId
-                where followedFilm.userId = ?
+                max(episode_film.episode) as current_episode
+                from followed_film
+                join users on users.id = followed_film.user_id
+                join films on films.id = followed_film.film_id
+                join episode_film on films.id = episode_film.film_id
+                where followed_film.user_id = ?
                 group by films.name, films.description, films.movie_duration, films.number_episodes, films.year, films.image, films.id
                 `,
                 [userId]
@@ -249,12 +257,13 @@ class UsersControllers {
 
             const query2 = promisePool.execute(
                 `
-                select evaluateuseroffilm.filmId, cast(avg(evaluateuseroffilm.evaluateId) as decimal(3,1)) as mediumPoint
-                from evaluateuseroffilm
-                join films on films.id = evaluateuseroffilm.filmId
-                where evaluateuseroffilm.filmId in ( select filmId from followedFilm where userId = ${userId} )
-                group by evaluateuseroffilm.filmId
-                `
+                select evaluate_user_film.film_id, cast(avg(evaluate_user_film.evaluate_id) as decimal(3,1)) as medium_point
+                from evaluate_user_film
+                join films on films.id = evaluate_user_film.film_id
+                where evaluate_user_film.film_id in ( select film_id from followed_film where user_id = ? )
+                group by evaluate_user_film.film_id
+                `,
+                [userId]
             )
 
 
@@ -264,10 +273,10 @@ class UsersControllers {
 
                 function addMediumPoint(followedFilm, mediumPoint) {
                     let updatedFollowedFilm = followedFilm.map((film) => {
-                        let match = mediumPoint.find((point) => point.filmId === film.id);
+                        let match = mediumPoint.find((point) => point.film_id === film.id);
 
                         if (match) {
-                            film.mediumPoint = match.mediumPoint;
+                            film.mediumPoint = match.medium_point;
                         } else {
                             film.mediumPoint = null
                         }
@@ -299,16 +308,18 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                 select password from users where id = ${userId}
-                `
+                 select password from users where id = ?
+                `,
+                [userId]
             )
 
             if (query[0][0].password === currentPassword) {
                 const updataPassword = await promisePool.execute(
                     `
                     update users set password = '${newPassword}'
-                    WHERE id = ${userId}
-                    `
+                    WHERE id = ?
+                    `,
+                    [userId]
                 )
 
                 res.json('Success')
@@ -359,7 +370,7 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                update commentuseroffilm set content = '${content}'
+                update comment_user_film set content = '${content}'
                 WHERE id = ${commentId}
                 `
             )
@@ -400,7 +411,7 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                update repcomment set content = '${content}'
+                update rep_comment set content = '${content}'
                 WHERE id = ${id}
                 `
             )
@@ -493,17 +504,20 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                select filmId from historyoffilm where filmId = '${filmId}' and userId = ${userId} and episode = ${episode}
-                `
+                select film_id from history_film
+                where film_id = ? and user_id = ? and episode = ?
+                `,
+                [filmId, userId, episode]
             )
 
             if (query[0].length === 0) {
                 const query = await promisePool.execute(
                     `
-                    insert historyoffilm (filmId, episode, userId)
+                    insert history_film (film_id, episode, user_id)
                     values 
-                    ( '${filmId}', ${episode}, ${userId})
-                    `
+                    (?, ?, ?)
+                    `,
+                    [filmId, episode, userId]
                 )
 
                 res.json('Add history sucess');
@@ -511,9 +525,10 @@ class UsersControllers {
             } else {
                 const query = await promisePool.execute(
                     `
-                    update historyoffilm set timeView = current_timeStamp
-                    WHERE userId = ${userId} and filmId = '${filmId}' and episode = ${episode}
-                    `
+                    update history_film set time_view = current_timeStamp
+                    WHERE user_id = ? and film_id = ? and episode = ?
+                    `,
+                    [userId, filmId, episode]
                 )
 
                 res.json('Update history sucess');
@@ -578,20 +593,21 @@ class UsersControllers {
     // [method: get], [router: /users/followed-only-film]
     async followedOnlyFilm(req, res, next) {
         try {
-            const userId = req.query.userId
-            const filmId = req.query.filmId
+            const { userId = null, filmId } = req.query
 
             const query = await promisePool.execute(
                 `
-                select * from followedfilm where filmId = '${filmId}' and userId = ${userId}
-                `
+                select * from followed_film where film_id = ? and user_id = ?
+                `,
+                [userId, filmId]
             )
 
             res.json(query[0])
 
 
         } catch (err) {
-            console.log(err)
+            // console.log(err)
+            console.log('xin chao')
         }
     }
 
@@ -610,8 +626,9 @@ class UsersControllers {
             const query = await promisePool.execute(
                 `
                 update users set avatar = '${avatar}'
-                WHERE id = ${userId}
-                `
+                WHERE id = ?
+                `,
+                [userId]
             )
 
             res.json({ notify: 'Update file Sucessfully!', avatar: avatar })
@@ -647,7 +664,7 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                select * from notifycation where userId = ? order by time desc
+                select * from notifycation where user_id = ? order by time desc
                 `,
                 [userId]
             )
@@ -689,10 +706,11 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                insert followedFilm (filmId, userId)
+                insert followed_film (film_id, user_id)
                 values 
-                ( '${filmId}', ${userId})
-                `
+                (?, ?)
+                `,
+                [filmId, userId]
             )
 
             res.json('Sucess')
@@ -709,9 +727,10 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                delete from followedFilm
-                where filmId = '${filmId}' and userId = ${userId}
-                `
+                delete from followed_film
+                where film_id = ? and user_id = ?
+                `,
+                [filmId, userId]
             )
 
             res.json('Delete Sucess')
@@ -727,22 +746,24 @@ class UsersControllers {
 
             const query = await promisePool.execute(
                 `
-                select * from historyoffilm where userId = ${userId} order by timeView desc
-                `
+                select * from history_film where user_id = ? order by time_view desc
+                `,
+                [userId]
             )
 
             if (query[0].length > 100) {
                 const query = await promisePool.execute(
                     `
-                    DELETE FROM historyoffilm
-                    WHERE timeView IN (
-                        SELECT timeView FROM (
-                            SELECT timeView FROM historyoffilm WHERE userId = ${userId} ORDER BY timeView ASC LIMIT 70
+                    DELETE FROM history_film
+                    WHERE time_view IN (
+                        SELECT time_view FROM (
+                            SELECT time_view FROM history_film WHERE user_id = ? ORDER BY time_view ASC LIMIT 70
                         ) AS tmp
                     )
-                    AND userId = ${userId}
+                    AND user_id = ?
 
-                    `
+                    `,
+                    [userId, userId]
                 )
             }
 
@@ -759,14 +780,14 @@ class UsersControllers {
 
             const query1 = promisePool.execute(
                 `
-                DELETE from repcomment
-                where idCommentFilm = ${commentId}
+                DELETE from rep_comment
+                where id_comment_film = ${commentId}
                 `
             )
 
             const query2 = promisePool.execute(
                 `
-                DELETE from commentuseroffilm
+                DELETE from comment_user_film
                 where id = ${commentId}
                 `
             )
@@ -787,7 +808,7 @@ class UsersControllers {
 
             const query1 = promisePool.execute(
                 `
-                delete from repcomment
+                delete from rep_comment
                 where id = ${id}
                 `
             )

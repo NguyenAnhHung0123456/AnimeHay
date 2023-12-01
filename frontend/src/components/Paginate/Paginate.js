@@ -36,9 +36,9 @@ function Paginate({ itemsPerPage = 30, items }) {
                                 onClick={() => {
                                     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
                                 }}
-                                currentEpisode={item.currentEpisode}
-                                number_episodes={item.number_episodes}
-                                mediumPoint={item.mediumPoint}
+                                currentEpisode={item.current_episode}
+                                numberEpisodes={item.number_episodes}
+                                mediumPoint={item.medium_point}
                             />
                         ))
                     }

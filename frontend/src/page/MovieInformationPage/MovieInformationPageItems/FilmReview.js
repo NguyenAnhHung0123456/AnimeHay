@@ -18,11 +18,6 @@ const FilmReview = ({ displayMsg }) => {
     // use selector
     const inforUsers = useSelector(state => (state.user.value))
 
-    // userReducer redux
-    const hasUser = useSelector((state) => {
-        return state.user
-    })
-
     useEffect(() => {
         const getData = async function () {
             try {
@@ -43,6 +38,8 @@ const FilmReview = ({ displayMsg }) => {
             const getData = async function () {
                 try {
                     const searchParams = new URLSearchParams(window.location.search)
+
+                    console.log('filmId', searchParams.get('filmId'))
 
                     const response = await axios.post(`http://127.0.0.1:4000/users/add-evaluate`, {
                         userId: inforUsers.id,

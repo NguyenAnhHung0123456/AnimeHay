@@ -5,6 +5,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 
 import styles from './HeaderItems.module.scss'
+import { Link } from 'react-router-dom';
 
 let cx = classNames.bind(styles);
 
@@ -81,9 +82,9 @@ function Search({ show }) {
                     <ul className={cx('after')}>
                         {data.map((item, index) => (
                             <li key={index}>
-                                <a onClick={() => {
+                                <Link onClick={() => {
                                     setSearchValue('')
-                                }} href={`/movie-information?filmId=${item.filmId}`} className={cx('conver-page-search')}>
+                                }} to={`/movie-information?filmId=${item.film_id}`} className={cx('conver-page-search')}>
                                     <div className={cx('wrap-avartar')}>
                                         <img alt='avata' src={item.image} />
                                     </div>
@@ -96,7 +97,7 @@ function Search({ show }) {
                                             (<span>{item.oddFilmLength}</span>)
                                         }
                                     </div>
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>

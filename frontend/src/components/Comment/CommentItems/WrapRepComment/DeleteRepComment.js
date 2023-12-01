@@ -12,6 +12,8 @@ const DeleteRepComment = ({
     rerender, setRerender, result
 }) => {
 
+    // console.log('result', result)
+
     // handle remote rep comment
     const handleRemoteRepComment = async (commentRepId) => {
         const defind = window.confirm('Bạn chắc chắn muốn xóa')
@@ -38,7 +40,7 @@ const DeleteRepComment = ({
     return (
         <div
             onClick={() => {
-                handleRemoteRepComment(result.commentRepId)
+                handleRemoteRepComment(result.comment_rep_id)
             }}
         >
             <FontAwesomeIcon icon={faDeleteLeft} />

@@ -25,6 +25,7 @@ const AddRepComment = ({
                 });
 
                 if (response.data === 'Add rep comment sucessfully!') {
+                    console.log('xin chao');
                     setShowBlockRepComment()
                     setRerender(!rerender)
                 }

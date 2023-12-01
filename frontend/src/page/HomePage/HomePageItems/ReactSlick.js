@@ -13,14 +13,14 @@ let cx = classNames.bind(styles);
 
 const settings = {
     dots: true,
-    autoplay: false,
+    autoplay: true,
     speed: 500,
     autoplaySpeed: 5000,
     cssEase: "linear",
-    slidesToShow: 5,
-    slidesToScroll: 2,
+    slidesToShow: 4,
+    slidesToScroll: 1,
     arrows: false,
-    infinite: true,
+    // infinite: true,
     responsive: [
         {
             breakpoint: 730,
@@ -67,7 +67,7 @@ const ReactSlick = () => {
         <Slider className={cx('slider')} {...settings}>
             {data && data.map((item, index) => (
                 <div key={index} className={cx('infor-movie')}>
-                    <Link to={`/movie-information?filmId=${item.filmId}`} className={cx('container-img')}>
+                    <Link to={`/movie-information?filmId=${item.film_id}`} className={cx('container-img')}>
                         <img alt='avata' src={`${item.image}`} />
                         {item.oddFilmLength ?
                             <span>{item.oddFilmLength} phút</span>
