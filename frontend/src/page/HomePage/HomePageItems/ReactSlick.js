@@ -74,6 +74,7 @@ const ReactSlick = () => {
                             :
                             <span>{item.maxEpisode || '??'}/{item.seriesFilmLength || '??'}</span>
                         }
+                        {console.log('i', item)}
                         <h3>{item.name}</h3>
                     </Link>
                 </div>

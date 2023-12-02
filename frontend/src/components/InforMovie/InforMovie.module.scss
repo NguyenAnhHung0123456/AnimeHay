@@ -25,32 +25,34 @@
             color: #fff;
             font-size: 1.6rem;
             display: block;
-            padding: 3px 4px;
+            padding: 6px 12px;
         }
 
         .evaluate {
             position: absolute;
-            top: 6px;
+            top: 8px;
             right: 12px;
             background-color: red;
             color: #fff;
             font-size: 1.6rem;
             display: block;
-            padding: 3px 4px;
+            padding: 6px 12px;
         }
 
         h3 {
-            width: 80%;
             position: absolute;
-            bottom: 2%;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0%;
+            left: 0;
+            right: 0;
             color: #cc8d4c;
             font-size: 1.8rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin: 0;
+            text-align: -webkit-center;
+            padding: 6px 20px;
+            background: #000;
         }
     }
 }

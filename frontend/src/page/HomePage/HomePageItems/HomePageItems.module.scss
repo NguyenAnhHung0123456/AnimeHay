@@ -32,21 +32,23 @@
                 color: #fff;
                 font-size: 1.6rem;
                 display: block;
-                padding: 3px 4px;
+                padding: 6px 12px;
             }
 
             h3 {
                 position: absolute;
-                color: #fff;
+                bottom: 0%;
+                left: 0;
+                right: 0;
+                color: #cc8d4c;
                 font-size: 1.8rem;
-                bottom: 0;
-                width: 75%;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 margin: 0;
-                left: 50%;
-                transform: translateX(-50%);
+                text-align: -webkit-center;
+                padding: 6px 20px;
+                background: #000;
             }
         }
 
